@@ -3,10 +3,7 @@ import Formik from "./components/Formik.vue";
 import Field from "./components/Field.vue";
 import Captcha from "./components/Captcha.vue";
 
-import { ref } from "vue";
 
-
-const isSubmitting = ref(true);
 
 const initialValues = {
   email: "",
@@ -14,33 +11,39 @@ const initialValues = {
   description: "",
   ville: "",
   hobbies: false,
-  captcha: "", 
+  captcha: "",
 };
 
 const validate = (values) => {
   const errors = {};
   if (!values.email) {
-    errors.email = "Required";
-  } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-  ) {
-    errors.email = "Invalid email address";
+    errors['email'] = "Email Required";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors['email'] = "Invalid email address";
+  }
+  if (!values.username) {
+    errors['username'] = "Username Required";
+  }else if (values.username.length < 5) {
+  //username plus de 5 caeractères
+    errors['username'] = "Username must be at least 5 characters";
+  }
+  if (!values.description) {
+    errors['description'] = "Description Required";
   }
   return errors;
 };
 
 
-const emit = defineEmits(["submit"]);
+// const emit = defineEmits(["submit"]);
 
-function onSubmit(errors) {
-  if(errors.values.length === 0){
-    emit("submit", {
-      isSubmitting:false,
-    });
-  }
-  console.log("eeeeee")
+function onSubmit() {
+  // if (errors.values.length === 0) {
+  //   emit("submit", {
+  //     isSubmitting: false,
+  //   });
+  // }
+  alert("Formulaire envoyé");
 }
-
 
 const options = [
   {
@@ -80,30 +83,34 @@ const options = [
     src: "https://picsum.photos/200?random=9",
   },
 ];
-
 </script>
 
 <template>
-  <header>
-    <div class="wrapper"></div>
-  </header>
   <div>
     <h1>Formik</h1>
-        <Formik :initialValues="initialValues" :validate="validate" @submit="onSubmit" >
-          <form @submit.prevent="handleSubmit">
-            <Field name="username" /> <!--Text--><br>
-            <Field name="description" as="textarea"/> <!--Textarea--><br>
-            <Field name="ville" as="select">
-              <option value="Paris">Paris</option>
-              <option value="Lyon">Lyon</option>
-              <option value="Marseille">Marseille</option>
-            </Field> <!--Select--><br>
-            <Field name="hobbies" as="checkbox"/> <!--Checkbox--><br>
-            <Field name="captcha" :as="Captcha" :options="options"/>
-            <button type="submit" :disabled="!isSubmitting">Submit</button>
- 
-          </form>
-        </Formik>
+    <!-- lister les errors -->
+
+    <Formik :initialValues="initialValues" :validate="validate" @submit="onSubmit"
+      v-slot="{ errors, handleSubmit, isSubmitting }">
+      <div v-for="(error, key) in errors" :key="key">
+        <h5>{{ error }}</h5>
+      </div>
+      <form @submit.prevent="handleSubmit">
+        <Field name="email" type="email" /><br />
+        <Field name="username" />
+        <!--Text--><br />
+        <Field name="description" as="textarea" />
+        <!--Textarea--><br />
+        <Field name="ville" as="select">
+        </Field>
+        <!--Select--><br />
+        <Field name="hobbies" as="checkbox" />
+        <!--Checkbox--><br />
+        <Field name="captcha" :as="Captcha" :options="options" />
+        <button type="submit">Submit</button>
+      </form>
+    </Formik>
+
   </div>
   <main></main>
 </template>
