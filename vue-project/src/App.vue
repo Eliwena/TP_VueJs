@@ -2,8 +2,7 @@
 import Formik from "./components/Formik.vue";
 import Field from "./components/Field.vue";
 import Captcha from "./components/Captcha.vue";
-
-
+import Select from "./components/Select.vue";
 
 const initialValues = {
   email: "",
@@ -17,34 +16,38 @@ const initialValues = {
 const validate = (values) => {
   const errors = {};
   if (!values.email) {
-    errors['email'] = "Email Required";
+    errors["email"] = "Email Required";
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors['email'] = "Invalid email address";
+    errors["email"] = "Invalid email address";
   }
   if (!values.username) {
-    errors['username'] = "Username Required";
-  }else if (values.username.length < 5) {
-  //username plus de 5 caeractères
-    errors['username'] = "Username must be at least 5 characters";
+    errors["username"] = "Username Required";
+  } else if (values.username.length < 5) {
+    //username plus de 5 caeractères
+    errors["username"] = "Username must be at least 5 characters";
   }
   if (!values.description) {
-    errors['description'] = "Description Required";
+    errors["description"] = "Description Required";
   }
   return errors;
 };
 
 
-// const emit = defineEmits(["submit"]);
-
-function onSubmit() {
-  // if (errors.values.length === 0) {
-  //   emit("submit", {
-  //     isSubmitting: false,
-  //   });
-  // }
-  alert("Formulaire envoyé");
+function onSubmit(data) {
+  alert('Formulaire envoyé avec les données suivante : \nEmail : ' + JSON.stringify(data.email) + '\nUsername : ' + JSON.stringify(data.username) + '\nDescription : ' + JSON.stringify(data.description) + '\nVille : ' + JSON.stringify(data.ville) + '\nHobbies : ' + JSON.stringify(data.hobbies) + '\nCaptcha : ' + JSON.stringify(data.captcha));
 }
 
+const optionSelect = [
+  {
+    id: 1,
+    name: "Paris",
+  }
+  ,
+  {
+    id: 2,
+    name: "Lyon",
+  }
+]
 const options = [
   {
     id: 1,
@@ -87,30 +90,35 @@ const options = [
 
 <template>
   <div>
-    <h1>Formik</h1>
-    <!-- lister les errors -->
+    <h1>Formik VueJS</h1>
 
     <Formik :initialValues="initialValues" :validate="validate" @submit="onSubmit"
       v-slot="{ errors, handleSubmit, isSubmitting }">
-      <div v-for="(error, key) in errors" :key="key">
-        <h5>{{ error }}</h5>
-      </div>
+
       <form @submit.prevent="handleSubmit">
-        <Field name="email" type="email" /><br />
+        <label for="email">Email</label>
+        <Field name="email" type="email" />
+        <!--Email--><br />
+        <label for="username">Username</label>
         <Field name="username" />
         <!--Text--><br />
+        <label for="description">Description</label>
         <Field name="description" as="textarea" />
         <!--Textarea--><br />
-        <Field name="ville" as="select">
-        </Field>
+        <label for="ville">Ville</label>
+        <Field name="ville" :as="Select" :options="optionSelect"> </Field>
         <!--Select--><br />
+        <label for="hobbies">Hobbies</label>
         <Field name="hobbies" as="checkbox" />
         <!--Checkbox--><br />
         <Field name="captcha" :as="Captcha" :options="options" />
         <button type="submit">Submit</button>
       </form>
+      <!-- lister les errors -->
+      <div v-for="(error, key) in errors" :key="key">
+        <h5>{{ error }}</h5>
+      </div>
     </Formik>
-
   </div>
   <main></main>
 </template>
@@ -141,5 +149,37 @@ header {
     place-items: flex-start;
     flex-wrap: wrap;
   }
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+/* STYLE BUTTON SUBMIT CENTRER MARGIN TOP COULEUR VERT*/
+
+button {
+  display: block;
+  margin: 0 auto;
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+
+/* style error jolie*/
+
+h5 {
+  color: red;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  text-align: center;
 }
 </style>

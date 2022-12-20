@@ -16,30 +16,27 @@ const props = defineProps({
   },
 });
 
-
 const data = ref(props.initialValues);
-
 
 const errors = ref([]);
 const isSubmitting = ref(false);
 
-//envoyer les données a fields 
+//envoyer les données a fields
 const submitEnd = () => {
   if (props.validate) {
-    console.log(data.value)
+    console.log(data.value);
     errors.value = props.validate(data.value);
   }
   if (Object.keys(errors.value).length === 0) {
     isSubmitting.value = true;
-    console.log("ccc")
-    props.onSubmit();
+    console.log("ccc");
+    props.onSubmit(data.value);
   }
-}
+};
 
 const newData = (value, name) => {
   data.value[name] = value;
 };
-
 
 // const isSubmitting = ref(true);
 
@@ -47,8 +44,6 @@ provide("formik", {
   data,
   newData,
 });
-
-
 </script>
 
 <template>
