@@ -29,13 +29,19 @@ const submitEnd = () => {
   }
   if (Object.keys(errors.value).length === 0) {
     isSubmitting.value = true;
-    console.log("ccc");
     props.onSubmit(data.value);
   }
 };
 
 const newData = (value, name) => {
-  data.value[name] = value;
+  data.value[name] = [];
+  if(name === "hobbies"){
+    //push data dans le tableau des hobbies 
+    data.value[name].push(value);
+  }else {
+    data.value[name] = value;
+  }
+  console.log(data.value[name], name);
 };
 
 // const isSubmitting = ref(true);

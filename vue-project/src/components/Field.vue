@@ -12,9 +12,12 @@ const props = defineProps({
     required: true,
   },
 });
+
+console.log(props.as, props.name)
 //injecter les données de Formik
 const formikProvide = inject("formik");
-console.log(formikProvide.data.value);
+console.log("formikProvide", formikProvide);
+
 </script>
 
 <template>
@@ -45,5 +48,7 @@ input, select,textarea {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+
 
 </style>

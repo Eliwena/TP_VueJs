@@ -1,16 +1,5 @@
-<template>
-  <div class="grid">
-    <img
-      :class="{ selected: option.id === value?.id }"
-      v-for="option in options"
-      :src="option.src"
-      @click="handleClick(option)"
-    />
-  </div>
-</template>
-
 <script setup>
-import { unref } from "vue";
+import { unref, ref } from "vue";
 const props = defineProps({
   options: {
     type: Array,
@@ -29,14 +18,31 @@ const props = defineProps({
 const emit = defineEmits({
   "update:value": function validate(value) {
     return typeof value === "object" && value.id && value.src;
-  },
+    },
 });
+
 
 const handleClick = (option) => {
   emit("update:value", unref(option));
+  //passer a true selected pour l'image cliqué 
+  console.log(option)
+
   //emit("toto", { target: { value: option, name: props.name } });
 };
 </script>
+
+<template>
+  <div class="grid">
+    <img
+      :class="{ selected: option.id == value?.id }"
+      v-for="option in options"
+      :src="option.src"
+      @click="handleClick(option)"
+    />
+  </div>
+</template>
+
+
 
 <style scoped>
 .grid {
@@ -45,6 +51,6 @@ const handleClick = (option) => {
   grid-gap: 10px;
 }
 .selected {
-  border: 5px solid magenta;
+  border: 2px solid green;
 }
 </style>

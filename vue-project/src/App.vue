@@ -3,13 +3,14 @@ import Formik from "./components/Formik.vue";
 import Field from "./components/Field.vue";
 import Captcha from "./components/Captcha.vue";
 import Select from "./components/Select.vue";
+import Radio from "./components/Radio.vue";
 
 const initialValues = {
   email: "",
   username: "",
   description: "",
   ville: "",
-  hobbies: false,
+  hobbies: "",
   captcha: "",
 };
 
@@ -29,6 +30,9 @@ const validate = (values) => {
   if (!values.description) {
     errors["description"] = "Description Required";
   }
+  if (!values.ville) {
+    errors["ville"] = "Ville Required";
+  }
   return errors;
 };
 
@@ -36,6 +40,28 @@ const validate = (values) => {
 function onSubmit(data) {
   alert('Formulaire envoyé avec les données suivante : \nEmail : ' + JSON.stringify(data.email) + '\nUsername : ' + JSON.stringify(data.username) + '\nDescription : ' + JSON.stringify(data.description) + '\nVille : ' + JSON.stringify(data.ville) + '\nHobbies : ' + JSON.stringify(data.hobbies) + '\nCaptcha : ' + JSON.stringify(data.captcha));
 }
+
+const optionHobbies = [
+  {
+    id: 1,
+    name: "Football",
+  }
+  ,
+  {
+    id: 2,
+    name: "Basketball",
+  }
+  ,
+  {
+    id: 3,
+    name: "Volleyball",
+  }
+  ,
+  {
+    id: 4,
+    name: "Natation",
+  }
+]
 
 const optionSelect = [
   {
@@ -46,6 +72,16 @@ const optionSelect = [
   {
     id: 2,
     name: "Lyon",
+  }
+  ,
+  {
+    id: 3,
+    name: "Marseille",
+  }
+  ,
+  {
+    id: 4,
+    name: "Bordeaux",
   }
 ]
 const options = [
@@ -108,9 +144,9 @@ const options = [
         <label for="ville">Ville</label>
         <Field name="ville" :as="Select" :options="optionSelect"> </Field>
         <!--Select--><br />
-        <label for="hobbies">Hobbies</label>
-        <Field name="hobbies" as="checkbox" />
-        <!--Checkbox--><br />
+        <label for="hobbies" >Favorite Hobbies</label>
+        <Field name="hobbies" :as="Radio" :options="optionHobbies" />
+        <!--Radio--><br />
         <Field name="captcha" :as="Captcha" :options="options" />
         <button type="submit">Submit</button>
       </form>

@@ -13,7 +13,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.options)
 </script>
 
 
